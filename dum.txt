@@ -1,0 +1,328 @@
+.gallery-bento {
+  display: grid;
+  gap: 1.5dvh; /* Slightly increased gap to make bubbly corners pop */
+  grid-template-columns: repeat(2, 48vw);
+  grid-template-rows: repeat(6, 15dvh);
+  justify-content: center;
+  align-content: center;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* The color that shows between the grid images */
+  --bento-gap-color: #e5e7eb;
+  /* The color of the section that slides over the hero */
+  --blind-bg-color: #1a1a1a;
+  --text-on-blind: #ffffff;
+  
+  /* Bubbly Radius Settings */
+  --bento-radius: 2.5rem; 
+}
+
+body {
+  /* Linked to your variable for consistency */
+  background: var(--bento-gap-color);
+  color: #000;
+  overflow-x: hidden;
+}
+
+/* --- MOBILE BASE LAYOUT (0px to 767px) --- */
+
+
+.gallery__item {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--bento-radius);
+}
+
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Mobile-Specific Grid Area Mapping */
+.item-1 { grid-area: 1 / 1 / 3 / 2; }
+.item-2 { grid-area: 1 / 2 / 2 / 3; }
+.item-3 { grid-area: 2 / 2 / 4 / 3; z-index: 10; } /* Focal */
+.item-4 { grid-area: 3 / 1 / 5 / 2; }
+.item-5 { grid-area: 4 / 2 / 5 / 3; }
+.item-6 { grid-area: 5 / 1 / 7 / 2; }
+.item-7 { grid-area: 5 / 2 / 6 / 3; }
+.item-8 { grid-area: 6 / 2 / 7 / 3; }
+
+/* Mobile Expanded State */
+.gallery--final {
+  grid-template-columns: 100vw 0vw;
+  grid-template-rows: 100dvh 0dvh 0dvh 0dvh 0dvh 0dvh;
+  gap: 0;
+}
+
+.gallery-bento {
+  display: grid;
+  /* Use 'width: 100%' instead of '100vw' to avoid scrollbar issues */
+  width: 100%;
+  height: 100dvh;
+  
+  /* Set your desired padding here - it will now apply to all 4 sides */
+  padding: 2rem; 
+  gap: 1.5rem;
+  
+  /* This is the most important property: it forces padding INSIDE the 100% width */
+  box-sizing: border-box; 
+
+  /* Use '1fr' instead of 'vw'. 1fr means "one part of the available space" 
+     AFTER padding and gaps are subtracted. */
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  
+  justify-content: center;
+  align-content: center;
+}
+
+/* --- DESKTOP OVERRIDE (768px and up) --- */
+@media (min-width: 768px) {
+  .gallery-bento {
+    grid-template-columns: repeat(3, 32.5vw);
+    grid-template-rows: repeat(4, 23dvh);
+    gap: 2dvh;
+  }
+
+  /* Desktop Grid Area Mapping */
+  .item-1 { grid-area: 1 / 1 / 3 / 2; }
+  .item-2 { grid-area: 1 / 2 / 2 / 3; }
+  .item-3 { grid-area: 2 / 2 / 4 / 3; }
+  .item-4 { grid-area: 1 / 3 / 3 / 3; }
+  .item-5 { grid-area: 3 / 1 / 3 / 2; }
+  .item-6 { grid-area: 3 / 3 / 5 / 4; }
+  .item-7 { grid-area: 4 / 1 / 5 / 2; }
+  .item-8 { grid-area: 4 / 2 / 5 / 3; }
+
+  /* Desktop Expanded State */
+  .gallery--final {
+    grid-template-columns: 100vw 0vw 0vw;
+    grid-template-rows: 100dvh 0dvh 0dvh 0dvh;
+  }
+}
+
+/* Global Transition Logic */
+.gallery--final .gallery__item:not(.item-3) {
+  opacity: 0;
+}
+
+.gallery--final .item-3 {
+  /* FLATTEN CORNERS FOR FULL SCREEN */
+  border-radius: 0;
+  grid-area: 1 / 1 / 7 / 3; /* Mobile span */
+}
+
+@media (min-width: 768px) {
+  .gallery--final .item-3 {
+    grid-area: 1 / 1 / 5 / 4; /* Desktop span */
+  }
+}
+
+.gallery-bento-wrapper {
+  background-color: var(--bento-gap-color);
+}
+
+------------ usegsap
+
+useGSAP(() => {
+        if (!galleryRef.current || !nextSectionRef.current) return;
+
+        const items = gsap.utils.toArray<HTMLElement>(".gallery__item");
+
+        // 1. Capture State
+        galleryRef.current.classList.add("gallery--final");
+        const state = Flip.getState(items);
+        galleryRef.current.classList.remove("gallery--final");
+
+        // 2. Timeline Logic
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top top",
+                end: "+=300%",
+                pin: true,
+                scrub: 1,
+            }
+        });
+
+        // Phase 1: Expansion
+        tl.add(
+            Flip.to(state, {
+                duration: 1.5,
+                ease: "none",
+                absolute: true,
+                // Explicitly tell Flip to animate these properties
+                props: "borderRadius,opacity", 
+            })
+        );
+
+        tl.to({}, { duration: 0.2 }); // Hold
+
+        // Phase 2: Reverse Blinds Overlay
+        tl.to(nextSectionRef.current, {
+            yPercent: -100,
+            duration: 1.5,
+            ease: "none",
+        });
+
+    }, { scope: containerRef });
+
+
+    --bh
+    "use client";
+import React, { useRef, useState } from 'react';
+import Spline from '@splinetool/react-spline';
+import gsap from 'gsap';
+import { ScrollTrigger, Flip } from 'gsap/all';
+import { useGSAP } from '@gsap/react';
+
+// Static Imports
+import img1 from '../plimage/portrait-pattern-1.jpg';
+import img2 from '../plimage/portrait-image-12.jpg';
+import img3 from '../plimage/focalpoint.png';
+import img4 from '../plimage/portrait-pattern-2.jpg';
+import img5 from '../plimage/portrait-pattern-4.jpg';
+import img6 from '../plimage/portrait-image-3.jpg';
+import img7 from '../plimage/portrait-pattern-3.jpg';
+import img8 from '../plimage/portrait-image-1.jpg';
+
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger, Flip);
+}
+
+const images = [img1, img2, img3, img4, img5, img6, img7, img8];
+
+export default function BentoHero() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const galleryRef = useRef<HTMLDivElement>(null);
+    const nextSectionRef = useRef<HTMLDivElement>(null);
+
+    // --- NEW STATE (Needed for Spline) ---
+    const [splineApp, setSplineApp] = useState<any>(null);
+    const onLoad = (app: any) => setSplineApp(app);
+
+    useGSAP(() => {
+        // --- PRESERVED LOGIC: The Guard ---
+        // Added !splineApp to ensure we don't build until the plant is ready
+        if (!galleryRef.current || !nextSectionRef.current || !splineApp) return;
+
+        const items = gsap.utils.toArray<HTMLElement>(".gallery__item");
+
+        // --- PRESERVED LOGIC: Flip Capture ---
+        galleryRef.current.classList.add("gallery--final");
+        const state = Flip.getState(items);
+        galleryRef.current.classList.remove("gallery--final");
+
+        // --- PRESERVED LOGIC: Timeline Configuration ---
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top top",
+                end: "+=600%", // Extended to accommodate the growth phase
+                pin: true,
+                scrub: 1,
+                invalidateOnRefresh: true,
+            }
+        });
+
+        // --- PRESERVED LOGIC: Phase 1 (Expansion) ---
+        tl.add(
+            Flip.to(state, {
+                duration: 1.5,
+                ease: "none",
+                absolute: true,
+                props: "borderRadius,opacity", 
+            })
+        );
+
+        tl.to({}, { duration: 0.2 }); // The "Hold" you had
+
+        // --- PRESERVED LOGIC: Phase 2 (Slide Up) ---
+        tl.to(nextSectionRef.current, {
+            yPercent: -100,
+            duration: 1.5,
+            ease: "none",
+        });
+
+        // --- NEW LOGIC: Phase 3 (Growth & Text) ---
+        // This triggers immediately AFTER the slide-up finishes
+        const splineProxy = { growth: 0 };
+        tl.add("growthStart");
+
+        tl.from([".reveal-title", ".reveal-para"], {
+            opacity: 0,
+            y: 40,
+            duration: 1,
+            stagger: 0.3,
+            ease: "power2.out"
+        }, "growthStart");
+
+        tl.to(splineProxy, {
+            growth: 100,
+            duration: 3,
+            ease: "none",
+            onUpdate: () => {
+                // Safety check: Only call if the variable actually exists
+                // This stops the console spam and lets the rest of the scroll work
+                try {
+                    splineApp.setVariable('Growth', splineProxy.growth);
+                } catch (err) {
+                    // Silently fail so the timeline keeps running
+                }
+            }
+        }, "growthStart");
+
+    }, { 
+        scope: containerRef, 
+        // --- CRITICAL: Added splineApp dependency so it waits for the 3D load ---
+        dependencies: [splineApp] 
+    });
+
+    return (
+        <div ref={containerRef} className="relative w-full h-screen overflow-hidden">
+            {/* Layer 1: Bento Section (Untouched) */}
+            <section className="absolute inset-0 z-10 bg-[#e5e7eb]">
+                <div ref={galleryRef} className="gallery-bento w-full h-full">
+                    {images.map((img, i) => (
+                        <div key={i} className={`gallery__item item-${i + 1}`}>
+                            <img src={img.src} className="w-full h-full object-cover" alt="" />
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Layer 2: Reveal Section (Updated with 2-Column Layout) */}
+            <section 
+                ref={nextSectionRef} 
+                className="absolute top-full left-0 z-20 w-full h-screen bg-[#111827] flex items-center justify-center overflow-hidden"
+            >
+                {/* Left: 3D Plant */}
+                <div className="w-1/2 h-full flex items-center justify-center relative">
+                    <Spline 
+                        onLoad={onLoad} 
+                        scene="https://prod.spline.design/vu1WAw6ONgVTG3cS/scene.splinecode" 
+                    />
+                </div>
+
+                {/* Right: Copy */}
+                <div className="w-1/2 h-full flex flex-col justify-center px-24 text-white">
+                    <div className="max-w-xl">
+                        <h2 className="reveal-title text-7xl font-bold mb-6">Welcome to DK greens</h2>
+                        <p className="reveal-para text-xl text-gray-300 leading-relaxed">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+}

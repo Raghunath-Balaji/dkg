@@ -1,26 +1,141 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Phase 1: Bento Colors */
+  --bento-gap-color: #e5e7eb; /* The "light" color between images */
+  
+  /* Phase 2: Reverse Blind Colors */
+  --blind-bg-color: #111827;  /* The dark color of the sliding section */
+  --blind-text-color: #ffffff;
+  
+  /* UI Feel */
+  --bento-radius: 2.5rem;      /* How "bubbly" the corners are */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bento-gap-color);
+  color: #000;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- BASE BENTO STYLING --- */
+
+.gallery-bento {
+  display: grid;
+  width: 100%;           /* Respects the parent, excludes scrollbar */
+  height: 100dvh;
+  padding: 2rem;         /* Use rem for consistent 'breathing room' */
+  gap: 1.5rem;
+  box-sizing: border-box; 
+
+  /* FIX: 1fr makes the columns elastic so they never overflow the padding */
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  
+  justify-content: center;
+  align-content: center;
+  overflow: hidden; /* Ensures no weird slivers on the edges */
+}
+
+.gallery__item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--bento-radius);
+  /* Ensure the Flip animation handles the radius change smoothly */
+  transition: border-radius 0.4s ease, opacity 0.4s ease;
+  background: #ccc; /* Fallback */
+}
+
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- MOBILE GRID MAPPING (2-Column) --- */
+
+.item-1 { grid-area: 1 / 1 / 3 / 2; }
+.item-2 { grid-area: 1 / 2 / 2 / 3; }
+.item-3 { grid-area: 2 / 2 / 4 / 3; z-index: 10; } /* Focal Point */
+.item-4 { grid-area: 3 / 1 / 5 / 2; }
+.item-5 { grid-area: 4 / 2 / 5 / 3; }
+.item-6 { grid-area: 5 / 1 / 7 / 2; }
+.item-7 { grid-area: 5 / 2 / 6 / 3; }
+.item-8 { grid-area: 6 / 2 / 7 / 3; }
+
+/* --- DESKTOP GRID MAPPING (3-Column) --- */
+
+@media (min-width: 768px) {
+  .gallery-bento {
+    grid-template-columns: repeat(3, 31vw);
+    grid-template-rows: repeat(4, 23dvh);
+    gap: 2dvh;
+    padding: 2dvh;
+  }
+
+  .item-1 { grid-area: 1 / 1 / 3 / 2; }
+  .item-2 { grid-area: 1 / 2 / 2 / 3; }
+  .item-3 { grid-area: 2 / 2 / 4 / 3; }
+  .item-4 { grid-area: 1 / 3 / 3 / 3; }
+  .item-5 { grid-area: 3 / 1 / 3 / 2; }
+  .item-6 { grid-area: 3 / 3 / 5 / 4; }
+  .item-7 { grid-area: 4 / 1 / 5 / 2; }
+  .item-8 { grid-area: 4 / 2 / 5 / 3; }
+}
+
+/* --- PHASE 1: EXPANDED HERO STATE --- */
+
+/* When GSAP adds this class, the focal image fills the grid */
+.gallery--final {
+  gap: 0;
+  padding: 0;
+}
+
+/* Mobile Final */
+.gallery--final {
+  grid-template-columns: 100% 0%;
+  grid-template-rows: 100dvh 0dvh 0dvh 0dvh 0dvh 0dvh;
+}
+
+/* Desktop Final */
+@media (min-width: 768px) {
+  .gallery--final {
+    grid-template-columns: 100% 0%;
+    grid-template-rows: 100dvh 0dvh 0dvh 0dvh;
+  }
+}
+
+/* Focal Image Evolution */
+.gallery--final .item-3 {
+  border-radius: 0; /* Square edges for full-screen look */
+  grid-area: 1 / 1 / 7 / 3; /* Fill Mobile */
+}
+
+@media (min-width: 768px) {
+  .gallery--final .item-3 {
+    grid-area: 1 / 1 / 5 / 4; /* Fill Desktop */
+  }
+}
+
+/* Hide non-focal items */
+.gallery--final .gallery__item:not(.item-3) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- PHASE 2: REVERSE BLINDS --- */
+
+/* The section that slides UP over the hero */
+.blind-section {
+  background-color: var(--blind-bg-color);
+  color: var(--blind-text-color);
+  box-shadow: 0 -20px 50px rgba(0,0,0,0.3); /* Adds depth as it overlaps */
 }
