@@ -326,3 +326,203 @@ export default function BentoHero() {
         </div>
     );
 }
+
+---- layer 2
+<section 
+                ref={nextSectionRef} 
+                className="absolute top-full left-0 z-20 w-full h-screen bg-[#111827] flex items-center justify-center overflow-hidden"
+            >
+                {/* Column 1: Spline Runtime */}
+                <div className="w-1/2 h-full relative">
+                    <Spline 
+                        onLoad={onLoad} 
+                        scene="https://prod.spline.design/vu1WAw6ONgVTG3cS/scene.splinecode" 
+                    />
+                </div>
+
+                {/* Column 2: Text UI */}
+                <div className="w-1/2 h-full flex flex-col justify-center px-24 text-white">
+                    <div className="max-w-xl">
+                        <h2 className="reveal-title text-7xl font-bold mb-6">
+                            Welcome to DK greens
+                        </h2>
+                        <p className="reveal-para text-xl text-gray-300 leading-relaxed">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+
+--------- pshow
+"use client";
+import React from 'react';
+
+const SPECIMENS = [
+    { 
+        id: 1, 
+        name: "Monstera Adansonii", 
+        cat: "CLIMBER", 
+        price: "$24", 
+        img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=1200&q=80", 
+        grid: "span 2 / span 2",
+        note: "Swiss-cheese foliage for vertical texture."
+    },
+    { 
+        id: 2, 
+        name: "Clay Vessel", 
+        cat: "HARDWARE", 
+        price: "$32", 
+        img: "https://images.unsplash.com/photo-1485955900006-10f4d324d445?w=800&q=80", 
+        grid: "span 1 / span 1" 
+    },
+    { 
+        id: 3, 
+        name: "Brass Mist", 
+        cat: "TOOLS", 
+        price: "$18", 
+        img: "https://images.unsplash.com/photo-1599591143896-19349969843c?w=800&q=80", 
+        grid: "span 1 / span 1" 
+    },
+    { 
+        // TESTIMONIAL CARD: Injected into the grid
+        id: 'quote',
+        type: 'testimonial',
+        text: "“DK Greens isn't just a shop; it’s a study in how we live alongside nature.”",
+        author: "Architectural Digest",
+        grid: "span 1 / span 2"
+    },
+    { 
+        id: 4, 
+        name: "Snake Plant", 
+        cat: "INTERIOR", 
+        price: "$21", 
+        img: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800&q=80", 
+        grid: "span 1 / span 2" 
+    },
+    { 
+        id: 5, 
+        name: "Bonsai Kit", 
+        cat: "ZEN", 
+        price: "$45", 
+        img: "https://images.unsplash.com/photo-1589152121163-f074fa4bcc38?w=800&q=80", 
+        grid: "span 2 / span 1" 
+    },
+];
+
+export default function ProductShowcase() {
+    const s = {
+        section: { 
+            backgroundColor: '#FCF9F1', // Warm Parchment
+            padding: '140px 0', 
+            color: '#2D463E', 
+            width: '100%',
+            fontFamily: 'serif' 
+        },
+        container: { width: '92%', maxWidth: '1600px', margin: '0 auto' },
+        grid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridAutoRows: '420px',
+            gap: '40px',
+        },
+        card: (gridArea: string) => ({
+            gridArea: gridArea,
+            position: 'relative' as 'relative',
+            borderRadius: '50px',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column' as 'column',
+            justifyContent: 'flex-end',
+            padding: '45px',
+            textDecoration: 'none',
+            color: '#FCF9F1',
+            backgroundColor: '#F2EFE4',
+            transition: 'transform 0.6s cubic-bezier(0.2, 1, 0.3, 1)',
+            willChange: 'transform'
+        }),
+        overlay: {
+            position: 'absolute' as 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to top, rgba(45, 70, 62, 0.85) 0%, transparent 60%)',
+            zIndex: 1
+        },
+        quoteCard: {
+            gridColumn: 'span 1',
+            gridRow: 'span 2',
+            backgroundColor: 'transparent',
+            border: '1px solid rgba(45, 70, 62, 0.1)',
+            borderRadius: '50px',
+            padding: '50px',
+            display: 'flex',
+            flexDirection: 'column' as 'column',
+            justifyContent: 'center',
+            color: '#2D463E'
+        }
+    };
+
+    return (
+        <section style={s.section}>
+            <div style={s.container}>
+                {/* --- EDITORIAL HEADER --- */}
+                <header style={{ marginBottom: '100px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                    <div style={{ maxWidth: '600px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '900', letterSpacing: '0.4em', color: '#8B9D83', textTransform: 'uppercase', display: 'block', marginBottom: '15px' }}>
+                            The Specimen Gallery
+                        </span>
+                        <h2 style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)', lineHeight: '0.9', margin: 0, fontWeight: '900', fontStyle: 'italic', letterSpacing: '-0.04em' }}>
+                            Rooted in <br/> Purpose.
+                        </h2>
+                    </div>
+                    <p style={{ maxWidth: '280px', fontSize: '16px', lineHeight: '1.6', color: '#6B7A68', fontStyle: 'italic', borderLeft: '1px solid #D9D1C1', paddingLeft: '30px' }}>
+                        A curated dialogue between architecture and the botanical world.
+                    </p>
+                </header>
+
+                <div style={s.grid}>
+                    {SPECIMENS.map((p) => {
+                        if (p.type === 'testimonial') {
+                            return (
+                                <div key={p.id} style={s.quoteCard}>
+                                    <h3 style={{ fontSize: '32px', lineHeight: '1.2', fontStyle: 'italic', marginBottom: '30px' }}>{p.text}</h3>
+                                    <span style={{ fontSize: '12px', fontWeight: '900', letterSpacing: '2px', textTransform: 'uppercase', color: '#8B9D83' }}>— {p.author}</span>
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <a key={p.id} href="#" style={s.card(p.grid)}>
+                                <img 
+                                    src={p.img} 
+                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }} 
+                                    alt={p.name} 
+                                />
+                                <div style={s.overlay} />
+                                <div style={{ position: 'relative', zIndex: 2 }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                                        <span style={{ fontSize: '10px', fontWeight: '900', letterSpacing: '2px', textTransform: 'uppercase', opacity: 0.7 }}>{p.cat}</span>
+                                        <span style={{ fontSize: '18px', fontWeight: 'bold' }}>{p.price}</span>
+                                    </div>
+                                    <h4 style={{ fontSize: '36px', fontWeight: '900', margin: '0 0 15px 0', fontStyle: 'italic' }}>{p.name}</h4>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '20px', borderTop: '1px solid rgba(252,249,241,0.2)' }}>
+                                        <span style={{ fontSize: '11px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '2px' }}>Shop Edition</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                                    </div>
+                                </div>
+                            </a>
+                        );
+                    })}
+
+                    {/* --- INTEGRATED WHATSAPP CTA --- */}
+                    <div style={{ ...s.card('span 1 / span 1'), backgroundColor: '#2D463E', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                        <h3 style={{ fontSize: '32px', fontStyle: 'italic', marginBottom: '10px' }}>Personal <br/> Curations.</h3>
+                        <p style={{ fontSize: '14px', opacity: 0.7, marginBottom: '30px' }}>Message us for a <br/> custom space analysis.</p>
+                        <a href="#" style={{ backgroundColor: '#FCF9F1', color: '#2D463E', padding: '15px 30px', borderRadius: '100px', fontWeight: '900', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', textDecoration: 'none' }}>
+                            Consult Expert
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}

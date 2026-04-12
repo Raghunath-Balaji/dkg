@@ -6,9 +6,26 @@
     box-sizing: border-box;
 }
 
+@media (pointer: fine) {
+  body, a, button {
+    cursor: none !important;
+  }
+}
+
+/* Ensure the custom cursor is never hidden by overflows */
+#custom-cursor-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
 :root {
   /* Phase 1: Bento Colors */
-  --bento-gap-color: #e5e7eb; /* The "light" color between images */
+  --bento-gap-color: #fcf9f1; /* The "light" color between images */
   
   /* Phase 2: Reverse Blind Colors */
   --blind-bg-color: #111827;  /* The dark color of the sliding section */
