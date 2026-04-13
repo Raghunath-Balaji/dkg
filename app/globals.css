@@ -4,155 +4,168 @@
 
 *, *::before, *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Prevent mobile browser "bounce" and address bar jitter */
+html, body {
+    height: 100%;
+    overscroll-behavior-y: none; 
 }
 
 @media (pointer: fine) {
-  body, a, button {
-    cursor: none !important;
-  }
+    body, a, button {
+        cursor: none !important;
+    }
 }
 
-/* Ensure the custom cursor is never hidden by overflows */
 #custom-cursor-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    pointer-events: none;
+    z-index: 9999999; /* Max Priority */
 }
 
 :root {
-  /* Phase 1: Bento Colors */
-  --bento-gap-color: #fcf9f1; /* The "light" color between images */
-  
-  /* Phase 2: Reverse Blind Colors */
-  --blind-bg-color: #111827;  /* The dark color of the sliding section */
-  --blind-text-color: #ffffff;
-  
-  /* UI Feel */
-  --bento-radius: 2.5rem;      /* How "bubbly" the corners are */
+    --bento-gap-color: #fcf9f1; 
+    --blind-bg-color: #2D463E;  /* Updated to your Forest Green */
+    --blind-text-color: #fcf9f1;
+    --bento-radius: 2.5rem;      
 }
 
 body {
-  background: var(--bento-gap-color);
-  color: #000;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
+    background: var(--bento-gap-color);
+    color: #000;
+    overflow-x: hidden;
+    width: 100%;
+    /* Use dvh to ensure the background always fills the dynamic mobile screen */
+    min-height: 100dvh; 
 }
 
 /* --- BASE BENTO STYLING --- */
 
 .gallery-bento {
-  display: grid;
-  width: 100%;           /* Respects the parent, excludes scrollbar */
-  height: 100dvh;
-  padding: 2rem;         /* Use rem for consistent 'breathing room' */
-  gap: 1.5rem;
-  box-sizing: border-box; 
-
-  /* FIX: 1fr makes the columns elastic so they never overflow the padding */
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  
-  justify-content: center;
-  align-content: center;
-  overflow: hidden; /* Ensures no weird slivers on the edges */
+    display: grid;
+    width: 100vw;
+    height: 100dvh;
+    /* Use dynamic padding to prevent overflow on small screens */
+    padding: 1rem; 
+    gap: 0.75rem;
+    box-sizing: border-box; 
+    
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    
+    justify-content: center;
+    align-content: center;
+    overflow: hidden;
+    position: relative;
 }
 
 .gallery__item {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--bento-radius);
-  /* Ensure the Flip animation handles the radius change smoothly */
-  transition: border-radius 0.4s ease, opacity 0.4s ease;
-  background: #ccc; /* Fallback */
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--bento-radius);
+    transition: border-radius 0.4s ease, opacity 0.4s ease;
+    width: 100%;
+    height: 100%;
 }
 
 .gallery__item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Prevents small gaps at the bottom of images */
+    display: block; 
 }
 
-/* --- MOBILE GRID MAPPING (2-Column) --- */
+/* --- MOBILE GRID MAPPING --- */
 
 .item-1 { grid-area: 1 / 1 / 3 / 2; }
 .item-2 { grid-area: 1 / 2 / 2 / 3; }
-.item-3 { grid-area: 2 / 2 / 4 / 3; z-index: 10; } /* Focal Point */
+.item-3 { grid-area: 2 / 2 / 4 / 3; z-index: 10; } 
 .item-4 { grid-area: 3 / 1 / 5 / 2; }
 .item-5 { grid-area: 4 / 2 / 5 / 3; }
 .item-6 { grid-area: 5 / 1 / 7 / 2; }
 .item-7 { grid-area: 5 / 2 / 6 / 3; }
 .item-8 { grid-area: 6 / 2 / 7 / 3; }
 
-/* --- DESKTOP GRID MAPPING (3-Column) --- */
+/* --- DESKTOP GRID MAPPING --- */
 
 @media (min-width: 768px) {
-  .gallery-bento {
-    grid-template-columns: repeat(3, 31vw);
-    grid-template-rows: repeat(4, 23dvh);
-    gap: 2dvh;
-    padding: 2dvh;
-  }
+    .gallery-bento {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 1.5rem;
+        padding: 2rem;
+    }
 
-  .item-1 { grid-area: 1 / 1 / 3 / 2; }
-  .item-2 { grid-area: 1 / 2 / 2 / 3; }
-  .item-3 { grid-area: 2 / 2 / 4 / 3; }
-  .item-4 { grid-area: 1 / 3 / 3 / 3; }
-  .item-5 { grid-area: 3 / 1 / 3 / 2; }
-  .item-6 { grid-area: 3 / 3 / 5 / 4; }
-  .item-7 { grid-area: 4 / 1 / 5 / 2; }
-  .item-8 { grid-area: 4 / 2 / 5 / 3; }
+    .item-1 { grid-area: 1 / 1 / 3 / 2; }
+    .item-2 { grid-area: 1 / 2 / 2 / 3; }
+    .item-3 { grid-area: 2 / 2 / 4 / 3; }
+    .item-4 { grid-area: 1 / 3 / 3 / 4; } /* Fixed column end to 4 */
+    .item-5 { grid-area: 3 / 1 / 4 / 2; } /* Fixed row end to 4 */
+    .item-6 { grid-area: 3 / 3 / 5 / 4; }
+    .item-7 { grid-area: 4 / 1 / 5 / 2; }
+    .item-8 { grid-area: 4 / 2 / 5 / 3; }
 }
 
 /* --- PHASE 1: EXPANDED HERO STATE --- */
 
-/* When GSAP adds this class, the focal image fills the grid */
 .gallery--final {
-  gap: 0;
-  padding: 0;
+    /* CRITICAL: Removing padding prevents the beige seepage on the edges */
+    padding: 0 !important; 
+    gap: 0 !important;
 }
 
-/* Mobile Final */
-.gallery--final {
-  grid-template-columns: 100% 0%;
-  grid-template-rows: 100dvh 0dvh 0dvh 0dvh 0dvh 0dvh;
-}
-
-/* Desktop Final */
-@media (min-width: 768px) {
-  .gallery--final {
-    grid-template-columns: 100% 0%;
-    grid-template-rows: 100dvh 0dvh 0dvh 0dvh;
-  }
-}
-
-/* Focal Image Evolution */
+/* Force focal item to cover the entire grid */
 .gallery--final .item-3 {
-  border-radius: 0; /* Square edges for full-screen look */
-  grid-area: 1 / 1 / 7 / 3; /* Fill Mobile */
+    border-radius: 0; 
+    grid-area: 1 / 1 / 7 / 3 !important; /* Mobile cover */
+    z-index: 50;
 }
 
 @media (min-width: 768px) {
-  .gallery--final .item-3 {
-    grid-area: 1 / 1 / 5 / 4; /* Fill Desktop */
-  }
+    .gallery--final .item-3 {
+        grid-area: 1 / 1 / 5 / 4 !important; /* Desktop cover */
+    }
 }
 
-/* Hide non-focal items */
 .gallery--final .gallery__item:not(.item-3) {
-  opacity: 0;
-  pointer-events: none;
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* --- PHASE 2: REVERSE BLINDS --- */
 
-/* The section that slides UP over the hero */
 .blind-section {
-  background-color: var(--blind-bg-color);
-  color: var(--blind-text-color);
-  box-shadow: 0 -20px 50px rgba(0,0,0,0.3); /* Adds depth as it overlaps */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background-color: var(--blind-bg-color);
+    color: var(--blind-text-color);
+    z-index: 100;
 }
+
+main, section, .gallery-bento, .product-showcase-container {
+    max-width: 100vw;
+    overflow-x: hidden;
+    /* This forces the browser to calculate width WITHOUT scrollbars */
+    box-sizing: border-box; 
+}
+
+/* Ensure images in the gallery don't push the container out */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* product showcase styles ------------------------------------------------------------------------------------*/
+/*  */
+
