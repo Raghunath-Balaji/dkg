@@ -99,14 +99,16 @@ const STYLES = `
 
 const SPECIMENS: any[] = [
     { id: 1, type: 'product', name: "Monstera Adansonii", cat: "CLIMBER", price: "$24", img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=1200", grid: "span 2 / span 2", desc: "Swiss-cheese leaves. Thrives in indirect light." },
-    { id: 2, type: 'product', name: "Clay Vessel", cat: "HARDWARE", price: "$32", img: "https://images.unsplash.com/photo-1485955900006-10f4d324d445?w=800", grid: "span 1 / span 1", desc: "Porous clay vessel for optimal root aeration." },
-    { id: 3, type: 'product', name: "Brass Mist", cat: "TOOLS", price: "$18", img: "https://images.unsplash.com/photo-1599591143896-19349969843c?w=800", grid: "span 1 / span 1", desc: "Ultra-fine hydration for tropical ferns." },
-    { id: 'quote', type: 'testimonial', text: "“DK Greens isn't just a shop; it’s a study in how we live alongside nature.”", author: "Architectural Digest", grid: "span 1 / span 2" },
+    { id: 2, type: 'product', name: "Clay Vessel", cat: "HARDWARE", price: "$32", img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=1200", grid: "span 1 / span 1", desc: "Porous clay vessel for optimal root aeration." },
+    { id: 3, type: 'product', name: "Brass Mist", cat: "TOOLS", price: "$18", img: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800", grid: "span 1 / span 1", desc: "Ultra-fine hydration for tropical ferns." },
+    { id: 'quote', type: 'testimonial', text: "“DK Greens isn't just a shop; Dk greens is a powerhouse.”", author: "Rajasekhar", grid: "span 1 / span 2" },
     { id: 4, type: 'product', name: "Snake Plant", cat: "INTERIOR", price: "$21", img: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800", grid: "span 1 / span 2", desc: "Virtually indestructible architectural centerpiece." },
-    { id: 5, type: 'product', name: "Bonsai Kit", cat: "ZEN", price: "$45", img: "https://images.unsplash.com/photo-1589152121163-f074fa4bcc38?w=800", grid: "span 2 / span 1", desc: "Complete curation for the meditative gardener." },
+    { id: 5, type: 'product', name: "Bonsai Kit", cat: "ZEN", price: "$45", img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=1200", grid: "span 2 / span 1", desc: "Complete curation for the meditative gardener." },
     { id: 6, type: 'product', name: "Velvet Alocasia", cat: "RARE", price: "$58", img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=800", grid: "span 1 / span 1", desc: "Deep obsidian velvet-touch leaves." },
-    { id: 7, type: 'product', name: "Glass Cloche", cat: "DISPLAY", price: "$38", img: "https://images.unsplash.com/photo-1520412099561-648319751e54?w=800", grid: "span 1 / span 1", desc: "Hand-blown glass dome for micro-climate control." },
-    { id: 8, type: 'product', name: "Organic Feed", cat: "CARE", price: "$12", img: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800", grid: "span 2 / span 2", desc: "Slow-release nutrients formulated from organic minerals." }
+    { id: 7, type: 'product', name: "Glass Cloche", cat: "DISPLAY", price: "$38", img: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=1200", grid: "span 1 / span 1", desc: "Hand-blown glass dome for micro-climate control." },
+    { id: 8, type: 'product', name: "Organic Feed", cat: "CARE", price: "$12", img: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800", grid: "span 2 / span 2", desc: "Slow-release nutrients formulated from organic minerals." },
+    { id: 'more quote', type: 'testimonial', text: "“Rajasekhar saagurappo dayalu kaadhula edho sonnan enna sonnan nu yaarukavadhu theiryuma?”", author: "Thalaivar", grid: "span 1 / span 2" },
+    { id: 9, type: 'product', name: "Demo product", cat: "TOOLS", price: "$18", img: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800", grid: "span 1 / span 1", desc: "Ultra-fine hydration for tropical ferns." }
 ];
 
 export default function ProductShowcase() {
@@ -126,8 +128,8 @@ export default function ProductShowcase() {
 
             <div className="showcase-container">
                 <header style={{ marginBottom: '80px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: '900', letterSpacing: '0.4em', color: '#8B9D83', textTransform: 'uppercase' }}>The Specimen Gallery</span>
-                    <h2 style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)', lineHeight: '0.9', margin: '20px 0 0 0', fontWeight: '900', fontStyle: 'italic' }}>Rooted in <br/> Purpose.</h2>
+                    <span style={{ fontSize: '11px', fontWeight: '900', letterSpacing: '0.4em', color: '#8B9D83', textTransform: 'uppercase' }}>Welcome to our</span>
+                    <h2 style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)', lineHeight: '0.9', margin: '20px 0 0 0', fontWeight: '900', fontStyle: 'italic' }}>Product <br/> Gallery.</h2>
                 </header>
 
                 <div className="showcase-grid">

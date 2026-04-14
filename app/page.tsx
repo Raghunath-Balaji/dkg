@@ -1,5 +1,6 @@
 import BentoHero from '@/components/BentoHero';
 import ProductShowcase from '@/components/productShowcase';
+import Contact from '@/components/contacts'
 
 export default function Home() {
   return (
@@ -10,6 +11,8 @@ export default function Home() {
           duration of BentoHero ends.
       */}
       <ProductShowcase />
+      <Contact />
+      
     </main>
   );
 }
